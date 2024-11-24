@@ -5,7 +5,7 @@ import './App.css';
 const fetchWeatherData = async (latitude, longitude) => {
   console.log(latitude);
   console.log(longitude);
-  const response = await fetch(`https://weatherforecastapi-1.onrender.com/forecast?latitude=${latitude}&longitude=${longitude}`); // http://localhost:8080/
+  const response = await fetch(`https://weatherforecastapi-1zmq.onrender.com/forecast?latitude=${latitude}&longitude=${longitude}`); // http://localhost:8080/
   if (!response.ok) {
     throw new Error("Failed to fetch weather data");
   }
@@ -14,7 +14,7 @@ const fetchWeatherData = async (latitude, longitude) => {
 
 // Funkcja do pobierania podsumowania
 const fetchSummary = async (latitude, longitude) => {
-  const response = await fetch(`https://weatherforecastapi-1.onrender.com/summary?latitude=${latitude}&longitude=${longitude}`); // http://localhost:8080/
+  const response = await fetch(`https://weatherforecastapi-1zmq.onrender.com/summary?latitude=${latitude}&longitude=${longitude}`); // http://localhost:8080/
   if (!response.ok) {
     throw new Error("Failed to fetch summary data");
   }
