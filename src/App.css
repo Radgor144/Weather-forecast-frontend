@@ -1,38 +1,215 @@
-.App {
+/* Globalne style */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #f4f6f9;
+  color: #333;
+  padding: 20px;
+}
+
+/* Kontener aplikacji */
+.app-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
   text-align: center;
+  font-size: 2.5em;
+  color: #2c3e50;
+  margin-bottom: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Tabela prognozy pogody */
+.weather-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.weather-table th,
+.weather-table td {
+  text-align: center;
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+.weather-table th {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.weather-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.weather-table td {
+  font-size: 1.1em;
+}
+
+/* Kolumny z ikonami pogodowymi */
+.weather-table td:nth-child(2) {
+  font-size: 1.5em;
+}
+
+/* Stopka z podsumowaniem */
+.summary-footer {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #ecf0f1;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Wyrównanie do środka */
+}
+
+.summary-footer h3 {
+  color: #2c3e50;
+  font-size: 1.8em;
+  margin-bottom: 10px;
+}
+
+.summary-footer p {
+  font-size: 1.2em;
+  color: #7f8c8d;
+  margin: 5px 0;
+}
+
+.summary-footer .sunshine-duration {
+  font-size: 1.3em;
+  color: #3498db; /* Wyróżnienie kolorem niebieskim */
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.summary-footer .temperature {
+  font-size: 1.1em;
+  color: #2ecc71;
+  margin-top: 10px;
+}
+
+/* Komunikaty o błędach */
+.error-message {
+  color: #e74c3c;
+  font-size: 1.3em;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Ładowanie danych */
+.loading-message {
+  font-size: 1.5em;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Stylizacja tabeli przy najechaniu */
+.weather-table tr:hover {
+  background-color: #eaf1f7;
+  cursor: pointer;
+}
+
+/* Responsywność */
+
+/* Tablet (max-width: 768px) */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  .weather-table td,
+  .weather-table th {
+    font-size: 1em;
+    padding: 8px;
+  }
+
+  .summary-footer {
+    padding: 15px;
+  }
+
+  .summary-footer h3 {
+    font-size: 1.6em;
+  }
+
+  .summary-footer p {
+    font-size: 1.1em;
+  }
+
+  .summary-footer .sunshine-duration,
+  .summary-footer .temperature {
+    font-size: 1.1em;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Telefony (max-width: 480px) */
+@media (max-width: 480px) {
+  .app-container {
+    padding: 15px;
   }
-  to {
-    transform: rotate(360deg);
+
+  h1 {
+    font-size: 1.6em;
+  }
+
+  .weather-table td,
+  .weather-table th {
+    font-size: 0.9em;
+    padding: 6px;
+  }
+
+  .summary-footer {
+    padding: 12px;
+  }
+
+  .summary-footer h3 {
+    font-size: 1.4em;
+  }
+
+  .summary-footer p {
+    font-size: 1em;
+  }
+
+  .summary-footer .sunshine-duration,
+  .summary-footer .temperature {
+    font-size: 1em;
+  }
+
+  /* Poprawa tabeli na małych urządzeniach */
+  .weather-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .weather-table td {
+    display: inline-block;
+    width: auto;
+  }
+
+  .weather-table th {
+    display: none; /* Ukrywa nagłówki tabeli */
+  }
+
+  .weather-table tr {
+    display: block;
+    margin-bottom: 10px;
+    background-color: #fff;
+    padding: 10px;
+  }
+
+  .weather-table td:nth-child(odd) {
+    font-weight: bold;
   }
 }
