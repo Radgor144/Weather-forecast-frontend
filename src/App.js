@@ -7,13 +7,13 @@ import Error from "./components/Error";
 import Map from "./components/Map"; // Assuming you have Map component
 
 const fetchWeatherData = async (latitude, longitude) => {
-  const response = await fetch(`http://localhost:8080/forecast?latitude=${latitude}&longitude=${longitude}`);
+  const response = await fetch(`https://weatherforecastapi-1.onrender.com/forecast?latitude=${latitude}&longitude=${longitude}`);
   if (!response.ok) throw new Error("Failed to fetch weather data");
   return response.json();
 };
 
 const fetchSummary = async (latitude, longitude) => {
-  const response = await fetch(`http://localhost:8080/summary?latitude=${latitude}&longitude=${longitude}`);
+  const response = await fetch(`https://weatherforecastapi-1.onrender.com/summary?latitude=${latitude}&longitude=${longitude}`);
   if (!response.ok) throw new Error("Failed to fetch summary data");
   return response.json();
 };
