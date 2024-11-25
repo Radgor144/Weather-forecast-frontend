@@ -1,81 +1,36 @@
 import React, { useState, useEffect } from "react";
 import './App.css';
+import WeatherTable from "./components/WeatherTable";
+import Summary from "./components/Summary";
+import Loading from "./components/Loading";
+import Error from "./components/Error";
+import Map from "./components/Map"; // Assuming you have Map component
 
-// Funkcja do pobierania danych pogodowych
 const fetchWeatherData = async (latitude, longitude) => {
-  console.log(latitude);
-  console.log(longitude);
-  const response = await fetch(`https://weatherforecastapi-1.onrender.com/forecast?latitude=${latitude}&longitude=${longitude}`); // http://localhost:8080/
-  if (!response.ok) {
-    throw new Error("Failed to fetch weather data");
-  }
+  const response = await fetch(`http://localhost:8080/forecast?latitude=${latitude}&longitude=${longitude}`);
+  if (!response.ok) throw new Error("Failed to fetch weather data");
   return response.json();
 };
 
-// Funkcja do pobierania podsumowania
 const fetchSummary = async (latitude, longitude) => {
-  const response = await fetch(`https://weatherforecastapi-1.onrender.com/summary?latitude=${latitude}&longitude=${longitude}`); // http://localhost:8080/
-  if (!response.ok) {
-    throw new Error("Failed to fetch summary data");
-  }
+  const response = await fetch(`http://localhost:8080/summary?latitude=${latitude}&longitude=${longitude}`);
+  if (!response.ok) throw new Error("Failed to fetch summary data");
   return response.json();
-};
-
-// Mapowanie kodów pogodowych na ikony
-const weatherIconMap = {
-  0: "☀️", // Clear sky
-  1: "🌤", // Mainly clear
-  2: "⛅", // Partly cloudy
-  3: "☁️", // Overcast
-  45: "🌫", // Fog
-  48: "🌫", // Rime fog
-  51: "🌧", // Light drizzle
-  53: "🌧", // Moderate drizzle
-  55: "🌧", // Dense drizzle
-  56: "🌧", // Freezing drizzle
-  57: "🌧", // Dense freezing drizzle
-  61: "🌦", // Light rain
-  63: "🌦", // Moderate rain
-  65: "🌧", // Heavy rain
-  66: "🌧", // Light freezing rain
-  67: "🌧", // Heavy freezing rain
-  71: "❄️", // Light snow
-  73: "❄️", // Moderate snow
-  75: "❄️", // Heavy snow
-  77: "❄️", // Snow grains
-  80: "🌧", // Slight rain showers
-  81: "🌧", // Moderate rain showers
-  82: "🌧", // Violent rain showers
-  85: "❄️", // Slight snow showers
-  86: "❄️", // Heavy snow showers
-  95: "⛈", // Thunderstorm
-  96: "⛈", // Thunderstorm with slight hail
-  99: "⛈", // Thunderstorm with heavy hail
 };
 
 const App = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [summary, setSummary] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [location, setLocation] = useState({
-    latitude: 50.06,
-    longitude: 19.93,
-  });
+  const [location, setLocation] = useState({ latitude: 50.06, longitude: 19.93 });
   const [error, setError] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        (error) => {
-          console.error("Error fetching location", error);
-          alert("Nie udało się pobrać lokalizacji. Użyję lokalizacji domyślnej.");
-        }
+        (position) => setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude }),
+        () => alert("Nie udało się pobrać lokalizacji. Użyję lokalizacji domyślnej.")
       );
     } else {
       alert("Geolokalizacja nie jest obsługiwana w tej przeglądarce.");
@@ -100,79 +55,56 @@ const App = () => {
         }
       }
     };
-
     fetchData();
   }, [location]);
 
-  useEffect(() => {
-    getLocation();
-  }, []);
+  useEffect(() => getLocation(), []);
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('pl-PL').replace(/\./g, '/');
+  // Funkcja przełączająca tryb ciemny
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    document.body.classList.toggle('dark-mode');
   };
 
-  // Funkcja formatująca średni czas nasłonecznienia na format "Xh Ym"
-  const formatSunshineDuration = (seconds) => {
-    const hours = Math.floor(seconds / 3600); // Obliczamy godziny
-    const minutes = Math.floor((seconds % 3600) / 60); // Obliczamy minuty
-    return `${hours}h ${minutes}m`;
+  // Funkcja obsługująca kliknięcie na mapie
+  const handleClickLocation = async (lat, lng) => {
+    try {
+      // Wysyłanie zapytania do API przy kliknięciu
+      const weather = await fetchWeatherData(lat, lng);
+      const summaryData = await fetchSummary(lat, lng);
+      setWeatherData(weather.proccessedData);
+      setSummary(summaryData);
+      setLocation({ latitude: lat, longitude: lng });  // Zaktualizuj lokalizację
+    } catch (err) {
+      console.error("Error fetching data for clicked location", err);
+      setError("Wystąpił błąd podczas pobierania danych.");
+    }
   };
 
-  // Jeśli dane o czasie nasłonecznienia są dostępne, formatujemy je
-  const formattedSunshine = summary ? formatSunshineDuration(summary.sunshine_duration) : "N/A";
+  const formatDate = (dateString) => new Date(dateString).toLocaleDateString('pl-PL').replace(/\./g, '/');
+  const formatSunshineDuration = (seconds) => `${Math.floor(seconds / 3600)}h ${Math.floor((seconds % 3600) / 60)}m`;
 
   return (
-    <div className="app-container">
-      <h1>Weather Forecast</h1>
+    <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
+      <h1 className={isDarkMode ? 'dark-mode' : ''}>Weather Forecast</h1>
 
-      {error && <p className="error-message">{error}</p>}
+      {/* Wyświetlanie współrzędnych na górze strony */}
+      <div className="coordinates" style={{ marginBottom: '20px', fontSize: '16px' }}>
+        <strong>Current Location: </strong> Latitude: {location.latitude}, Longitude: {location.longitude}
+      </div>
 
+      <button onClick={toggleDarkMode} style={{ margin: '20px 0', padding: '10px 15px', backgroundColor: '#3498db', color: '#fff', border: 'none', borderRadius: '5px' }}>
+        {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+      </button>
+      {error && <Error message={error} />}
       {isLoading ? (
-        <p>Loading data...</p>
+        <Loading />
       ) : (
         <div>
-          {weatherData && (
-            <div>
-              <h3>Weather Forecast</h3>
-              <table className="weather-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Weather</th>
-                    <th>Max Temp (°C)</th>
-                    <th>Min Temp (°C)</th>
-                    <th>Generated Energy (kWh)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {weatherData.time.map((date, index) => (
-                    <tr key={index}>
-                      <td>{formatDate(date)}</td>
-                      <td>{weatherIconMap[weatherData.weather_code[index]] || "❓"}</td>
-                      <td>{weatherData.temperature_2m_max[index]}</td>
-                      <td>{weatherData.temperature_2m_min[index]}</td>
-                      <td>{weatherData.generatedEnergy_kWh[index]}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-{summary && (
-  <div className="summary-footer">
-    <h3>Weekly Summary</h3>
-    <p>Max Temp: {summary.temperature_2m_max} °C</p>
-    <p>Min Temp: {summary.temperature_2m_min} °C</p>
-    <p>Avg Pressure: {summary.avgPressure} hPa</p>
-    <p>Avg Sunshine Duration: {formatSunshineDuration(summary.sunshine_duration)}</p> {/* Sformatowana wartość */}
-    <p>Precipitation Summary: {summary.precipitationSummary}</p>
-  </div>
-)}
-
-
+          {weatherData && <WeatherTable weatherData={weatherData} formatDate={formatDate} />}
+          {summary && <Summary summary={summary} formatSunshineDuration={formatSunshineDuration} />}
+          {/* Only render the map if location data is available */}
+          {location.latitude && location.longitude && <Map latitude={location.latitude} longitude={location.longitude} onClickLocation={handleClickLocation} />}
         </div>
       )}
     </div>

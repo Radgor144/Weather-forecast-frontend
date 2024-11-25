@@ -10,6 +10,12 @@ body {
   background-color: #f4f6f9;
   color: #333;
   padding: 20px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+  background-color: #2c3e50;
+  color: #ecf0f1;
 }
 
 /* Kontener aplikacji */
@@ -20,6 +26,12 @@ body {
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.app-container.dark-mode {
+  background-color: #34495e;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
@@ -29,37 +41,38 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Tabela prognozy pogody */
+h1.dark-mode {
+  color: #ecf0f1;
+}
+
 .weather-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
 }
 
-.weather-table th,
-.weather-table td {
-  text-align: center;
-  padding: 12px;
+.weather-table th, .weather-table td {
+  padding: 8px;
   border: 1px solid #ddd;
 }
 
-.weather-table th {
-  background-color: #3498db;
+.weather-table.dark-mode th, .weather-table.dark-mode td {
   color: #fff;
+  background-color: #444;
 }
 
-.weather-table tr:nth-child(even) {
+.weather-table.dark-mode {
+  background-color: #2c2c2c;
+}
+
+.coordinates {
+  font-size: 16px;
+  color: #333;
+  padding: 10px;
   background-color: #f2f2f2;
+  border-radius: 5px;
 }
 
-.weather-table td {
-  font-size: 1.1em;
-}
 
-/* Kolumny z ikonami pogodowymi */
-.weather-table td:nth-child(2) {
-  font-size: 1.5em;
-}
 
 /* Stopka z podsumowaniem */
 .summary-footer {
@@ -68,13 +81,23 @@ h1 {
   background-color: #ecf0f1;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center; /* Wyrównanie do środka */
+  text-align: center; 
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.summary-footer.dark-mode {
+  background-color: #2c3e50;
+  color: #ecf0f1;
 }
 
 .summary-footer h3 {
   color: #2c3e50;
   font-size: 1.8em;
   margin-bottom: 10px;
+}
+
+.summary-footer h3.dark-mode {
+  color: #ecf0f1;
 }
 
 .summary-footer p {
@@ -85,9 +108,13 @@ h1 {
 
 .summary-footer .sunshine-duration {
   font-size: 1.3em;
-  color: #3498db; /* Wyróżnienie kolorem niebieskim */
+  color: #3498db; 
   font-weight: bold;
   margin-top: 15px;
+}
+
+.summary-footer .sunshine-duration.dark-mode {
+  color: #1abc9c;
 }
 
 .summary-footer .temperature {
@@ -111,11 +138,15 @@ h1 {
   margin-top: 20px;
 }
 
+
+
 /* Stylizacja tabeli przy najechaniu */
 .weather-table tr:hover {
   background-color: #eaf1f7;
   cursor: pointer;
 }
+
+
 
 /* Responsywność */
 
@@ -186,20 +217,29 @@ h1 {
     font-size: 1em;
   }
 
-  /* Poprawa tabeli na małych urządzeniach */
+  /* Zmiana wyglądu tabeli na urządzeniach mobilnych */
   .weather-table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
   }
 
-  .weather-table td {
-    display: inline-block;
-    width: auto;
+  .weather-table th {
+    display: block;
+    font-weight: bold;
+    background-color: #3498db;
+    color: #fff;
+    text-align: left;
+    padding: 8px;
   }
 
-  .weather-table th {
-    display: none; /* Ukrywa nagłówki tabeli */
+  .weather-table td {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px;
+    border: none;
+    border-top: 1px solid #ddd;
   }
 
   .weather-table tr {
@@ -211,5 +251,15 @@ h1 {
 
   .weather-table td:nth-child(odd) {
     font-weight: bold;
+  }
+
+  /* Ukrycie nagłówków tabeli na małych ekranach */
+  .weather-table th:nth-child(1),
+  .weather-table td:nth-child(1) {
+    display: none;
+  }
+
+  .weather-table td {
+    font-weight: normal;
   }
 }
