@@ -19,10 +19,10 @@ const App = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude }),
-        () => alert("Nie udało się pobrać lokalizacji. Użyję lokalizacji domyślnej.")
+        () => alert("Failed to retrieve the location. Using the default location.")
       );
     } else {
-      alert("Geolokalizacja nie jest obsługiwana w tej przeglądarce.");
+      alert("Geolocation is not supported in this browser.");
     }
   };
 
@@ -38,7 +38,7 @@ const App = () => {
           setSummary(summaryData);
         } catch (err) {
           console.error("Error fetching data", err);
-          setError("Wystąpił błąd podczas pobierania danych.");
+          setError("The error occurred while fetching the data.");
         } finally {
           setIsLoading(false);
         }
@@ -63,7 +63,7 @@ const App = () => {
       setLocation({ latitude: lat, longitude: lng });  
     } catch (err) {
       console.error("Error fetching data for clicked location", err);
-      setError("Wystąpił błąd podczas pobierania danych.");
+      setError("The error occurred while fetching the data.");
     }
   };
 
