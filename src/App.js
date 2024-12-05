@@ -1,22 +1,11 @@
 import React, { useState, useEffect } from "react";
-import './App.css';
+import './css/app.css';
 import WeatherTable from "./components/WeatherTable";
 import Summary from "./components/Summary";
 import Loading from "./components/Loading";
 import Error from "./components/Error";
-import Map from "./components/Map"; // Assuming you have Map component
-
-const fetchWeatherData = async (latitude, longitude) => {
-  const response = await fetch(`https://weatherforecastapi-1.onrender.com/forecast?latitude=${latitude}&longitude=${longitude}`);
-  if (!response.ok) throw new Error("Failed to fetch weather data");
-  return response.json();
-};
-
-const fetchSummary = async (latitude, longitude) => {
-  const response = await fetch(`https://weatherforecastapi-1.onrender.com/summary?latitude=${latitude}&longitude=${longitude}`);
-  if (!response.ok) throw new Error("Failed to fetch summary data");
-  return response.json();
-};
+import Map from "./components/Map";
+import { fetchWeatherData, fetchSummary} from "./api/WeatherDataClient.js";
 
 const App = () => {
   const [weatherData, setWeatherData] = useState(null);
@@ -60,21 +49,18 @@ const App = () => {
 
   useEffect(() => getLocation(), []);
 
-  // Funkcja przełączająca tryb ciemny
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     document.body.classList.toggle('dark-mode');
   };
 
-  // Funkcja obsługująca kliknięcie na mapie
   const handleClickLocation = async (lat, lng) => {
     try {
-      // Wysyłanie zapytania do API przy kliknięciu
       const weather = await fetchWeatherData(lat, lng);
       const summaryData = await fetchSummary(lat, lng);
       setWeatherData(weather.proccessedData);
       setSummary(summaryData);
-      setLocation({ latitude: lat, longitude: lng });  // Zaktualizuj lokalizację
+      setLocation({ latitude: lat, longitude: lng });  
     } catch (err) {
       console.error("Error fetching data for clicked location", err);
       setError("Wystąpił błąd podczas pobierania danych.");
@@ -86,14 +72,13 @@ const App = () => {
 
   return (
     <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
-      <h1 className={isDarkMode ? 'dark-mode' : ''}>Weather Forecast</h1>
+      <h1>Weather Forecast</h1>
 
-      {/* Wyświetlanie współrzędnych na górze strony */}
-      <div className="coordinates" style={{ marginBottom: '20px', fontSize: '16px' }}>
+      <div className={`coordinates`}>
         <strong>Current Location: </strong> Latitude: {location.latitude}, Longitude: {location.longitude}
       </div>
 
-      <button onClick={toggleDarkMode} style={{ margin: '20px 0', padding: '10px 15px', backgroundColor: '#3498db', color: '#fff', border: 'none', borderRadius: '5px' }}>
+      <button className="toggle-dark-mode-button" onClick={toggleDarkMode}>
         {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       </button>
       {error && <Error message={error} />}
@@ -102,9 +87,8 @@ const App = () => {
       ) : (
         <div>
           {weatherData && <WeatherTable weatherData={weatherData} formatDate={formatDate} />}
-          {summary && <Summary summary={summary} formatSunshineDuration={formatSunshineDuration} />}
-          {/* Only render the map if location data is available */}
           {location.latitude && location.longitude && <Map latitude={location.latitude} longitude={location.longitude} onClickLocation={handleClickLocation} />}
+          {summary && <Summary summary={summary} formatSunshineDuration={formatSunshineDuration}/>}
         </div>
       )}
     </div>
