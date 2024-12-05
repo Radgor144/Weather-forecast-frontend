@@ -1,5 +1,5 @@
 import React from "react";
-import { fontAwesomeIconMap } from "./WeatherIconMap";
+import { fontAwesomeIconMap } from "./WeatherIconMap1";
 
 const WeatherIcon = ({ weatherCode }) => {
   if (fontAwesomeIconMap[weatherCode]) {
