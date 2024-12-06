@@ -5,13 +5,13 @@ import Summary from "./components/Summary";
 import Loading from "./components/Loading";
 import Error from "./components/Error";
 import Map from "./components/Map";
-import { useWeatherData } from "./hooks/UseWeatherData  ";
-import { useGeolocation } from "./hooks/UseGeolocation";
+import { UseWeatherData } from "./hooks/UseWeatherData";
+import { UseGeolocation } from "./hooks/UseGeolocation";
 
 const App = () => {
   const defaultLocation = { latitude: 50.06, longitude: 19.93 };
-  const [location, setLocation] = useGeolocation(defaultLocation);
-  const {weatherData, summary, isLoading, error} = useWeatherData(location);
+  const [location, setLocation] = UseGeolocation(defaultLocation);
+  const {weatherData, summary, isLoading, error} = UseWeatherData(location);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const toggleDarkMode = () => {

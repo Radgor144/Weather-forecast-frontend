@@ -34,7 +34,7 @@ const Map = ({ latitude, longitude, onClickLocation }) => {
         <Marker position={[latitude, longitude]} icon={defaultIcon}>
           <Popup>Your position</Popup>
         </Marker>
-        <ClickMapEvent />
+        <ClickMapEvent/>
       </MapContainer>
     </div>
   );
