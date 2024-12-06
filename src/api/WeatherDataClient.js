@@ -1,5 +1,5 @@
 
-const API_URL = 'https://weatherforecastapi-1.onrender.com';
+const API_URL = 'http://localhost:8080';
 
 export const fetchWeatherData = async (latitude, longitude) => {
   const response = await fetch(`${API_URL}/forecast?latitude=${latitude}&longitude=${longitude}`); //

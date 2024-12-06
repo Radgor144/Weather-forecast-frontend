@@ -14,13 +14,21 @@
   text-align: center;
 }
 
-.weather-table tr:hover {
+.weather-table tbody tr:hover {
   background-color: rgba(0, 123, 255, 0.1);
   cursor: pointer;
 }
 
+thead tr {
+  background-color: #007bff;
+}
+
 
 @media (max-width: 480px) {
+
+  tbody td:nth-child(1) {
+    background-color: #007bff;
+  }
 
   .weather-table th {
     display: block;
@@ -33,6 +41,6 @@
   .weather-table tr {
     display: block;
     margin-bottom: 10px;
-    padding: 10px;
+
   }
 }

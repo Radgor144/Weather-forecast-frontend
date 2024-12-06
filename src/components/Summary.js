@@ -1,4 +1,5 @@
 import React from "react";
+import '../css/summary.css';
 
 const Summary = ({ summary, formatSunshineDuration}) => (
   <div className={`summary-footer`}>
